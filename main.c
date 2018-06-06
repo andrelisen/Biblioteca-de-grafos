@@ -10,9 +10,6 @@ int main(void)
 {
 	int x, y, val;
 	Grafo *g;
-	int *vet = (int*) malloc(sizeof(int)); // aloca só uma posição
-	int *vet2 = (int*) malloc(sizeof(int));
-	
 	do{
 		printf("\n------\n");
 		printf("MENU\n");

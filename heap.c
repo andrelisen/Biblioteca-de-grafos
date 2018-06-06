@@ -50,30 +50,25 @@ int findset(int *vet, int j)
 
 //HEAP
 
-int *criaHeap(int *vet, int qnt, int valor) //trazendo vetor do main para caso de novo elemento
+void criaHeap(Aresta *a, int u, int v, int peso) 
 {
-	int i, cont=0, x=qnt;
-
-			if(qnt==1)//primeiro elemento do vetor
-			{
-				int *v=(int*) malloc(sizeof(int));
-				v[0]=valor;
-				return v;	
-			}
-				else{
-					int *vaux=(int*) malloc(sizeof(int));
-					i=0;
-					x=x-2;
-						while(i<=x)
-						{
-							vaux[i]=vet[i];
-							i++;
-						}
-							vaux[i]=valor;
-								MinHeapify(vaux,0, qnt);
-								vaux=percorre(vaux, qnt);
-								return vaux;
+				Aresta *novo=(Aresta*) malloc(sizeof(Aresta));
+				novo->chave_partida=u;
+				novo->chave_adjacente=v;
+				novo->peso=peso;
+				novo->proximo=NULL;
+					if(a->proximo==NULL)
+					{
+						a->proximo=novo;
 					}
+						else{
+							Aresta *aux=a->proximo;
+								while(aux->proximo!=NULL)
+								{
+									aux=aux->proximo;
+								}
+									aux->proximo=novo;
+							}
 }	
 
 int *percorre(int *vet, int tam)
@@ -187,3 +182,41 @@ void raiz(int *vet, int num)
 	}
 }
 
+
+void ordena(Aresta *vetor)
+{
+		Aresta *auxiliar=vetor->proximo;
+		int peso1=0, peso2=0, troca=0;
+		Aresta *temp=(Aresta*) malloc(sizeof(Aresta));
+			while(auxiliar != NULL)
+			{
+					if(auxiliar->proximo!=NULL)
+					{
+						Aresta *no=auxiliar;
+						while(no!=NULL)
+						{
+						//printf("valor de 1=%d\n", peso1);
+							peso1=no->peso;
+							peso2=no->proximo->peso;
+					//		printf("valor de 2=%d\n", peso2);
+								if(peso2<peso1)
+								{
+								temp->chave_partida=no->proximo->chave_partida;
+									temp->chave_adjacente=no->proximo->chave_adjacente;
+										temp->peso=no->proximo->peso;
+								no->proximo->chave_partida=no->chave_partida;
+									no->proximo->chave_adjacente=no->chave_adjacente;
+										no->proximo->peso=no->peso;
+								no->chave_partida=temp->chave_partida;
+									no->chave_adjacente=temp->chave_adjacente;
+										no->peso=temp->peso;
+								troca=peso2;
+								peso2=peso1;
+								peso1=troca;
+								}
+						no=no->proximo;
+						}
+					}	
+			auxiliar=auxiliar->proximo;
+			}
+}
