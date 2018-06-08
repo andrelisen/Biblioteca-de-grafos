@@ -23,6 +23,7 @@ void imprimeConj(int num, int *vet)
 		printf("Vazio");
 	}
 	int i;
+	printf("\nConjuntos\n");
 		for(i=0;i<num;i++)
 		{
 			printf("[%d]\t", vet[i]);
@@ -50,173 +51,150 @@ int findset(int *vet, int j)
 
 //HEAP
 
-void criaHeap(Aresta *a, int u, int v, int peso) 
+Aresta *criaHeap(Grafo *g)
 {
-				Aresta *novo=(Aresta*) malloc(sizeof(Aresta));
-				novo->chave_partida=u;
-				novo->chave_adjacente=v;
-				novo->peso=peso;
-				novo->proximo=NULL;
-					if(a->proximo==NULL)
+		Nodo*aux=g->listanodos;
+		int tam=g->numArestas, i=0;
+		Aresta *nova=(Aresta*) malloc(tam*sizeof(Aresta));
+			while(aux!=NULL)
+			{
+				if(aux->adjacente!=NULL)
+				{
+				nova[i].chave_partida=aux->adjacente->chave_partida;
+					nova[i].chave_adjacente=aux->adjacente->chave_adjacente;
+						nova[i].peso=aux->adjacente->peso;
+				i++;
+					if(aux->adjacente->proximo!=NULL)
 					{
-						a->proximo=novo;
-					}
-						else{
-							Aresta *aux=a->proximo;
-								while(aux->proximo!=NULL)
-								{
-									aux=aux->proximo;
-								}
-									aux->proximo=novo;
+						Aresta*aux2=aux->adjacente->proximo;
+							while(aux2!=NULL)
+							{
+								nova[i].chave_partida=aux2->chave_partida;
+									nova[i].chave_adjacente=aux2->chave_adjacente;
+										nova[i].peso=aux2->peso;
+									i++;
+								aux2=aux2->proximo;
 							}
-}	
+					}	
+				}
+				aux=aux->proximo;
+			}	
+				//printf("--ANTES--\n");
+			//for(i=0;i<tam;i++)
+			//{
+				//printf("VEZ=%d\t[%d]->[%d]--(%d)\n", i, nova[i].chave_partida, nova[i]. chave_adjacente, nova[i].peso);
+			//}
+	//printf("\n--\nValor =%d\n---\n", tam);
+		percorre(nova, tam);
+				//printf("--DEPOIS--\n");
+			//for(i=0;i<tam;i++)
+			//{
+				//printf("VEZ=%d\t[%d]->[%d]--(%d)\n", i, nova[i].chave_partida, nova[i]. chave_adjacente, nova[i].peso);
+			//}
+return nova;
+}
 
-int *percorre(int *vet, int tam)
+void percorre(Aresta *vet, int tam)
 {
-	int j, k, temp=0;
+	int j, k, u=0, v=0, peso=0;
 		for(j=0;j<tam;j++)
 		{
 			for(k=j+1;k<tam;k++)
 			{
-				if(vet[j]>vet[k])
+				if(vet[j].peso>vet[k].peso)
 				{
-					temp=vet[j];
-						vet[j]=vet[k];
-							vet[k]=temp;
+					u=vet[j].chave_partida;
+						v=vet[j].chave_adjacente;
+							peso=vet[j].peso;
+					vet[j].chave_partida=vet[k].chave_partida;
+						vet[j].chave_adjacente=vet[k].chave_adjacente;
+							vet[j].peso=vet[k].peso;
+					vet[k].chave_partida=u;
+						vet[k].chave_adjacente=v;
+							vet[k].peso=peso;
 				}
 			}
 		}
-return vet;
 }
-int esquerda(int pos)
-{
-	int aux;
-	aux=2*pos+1;
-	return aux;
-}
+//int esquerda(int pos)
+//{
+	//int aux;
+	//aux=2*pos+1;
+	//return aux;
+//}
 
-int direita(int pos)
-{
-	int aux;
-	aux=2*pos+2;
-	return aux;
-}
+//int direita(int pos)
+//{
+	//int aux;
+	//aux=2*pos+2;
+	//return aux;
+//}
 
-void MinHeapify(int *vet, int pos, int num)
-{
-	int cont=0;
-	int e=esquerda(pos);//posição
-	int d=direita(pos);//posição
-	int menor=pos, aux;//posição
-		if(e<num && vet[e]<vet[pos])
-		{
-			menor=e;
-		}
-			if(d<num && vet[d]<vet[pos])
-			{
-				menor=d;
-			}
-				if(menor != pos && menor<num)
-				{
-				aux=vet[pos];
-					vet[pos]=vet[menor];
-						vet[menor]=aux;
-						MinHeapify(vet, menor, num);
-				}
-				else{
-					cont=pos;//porque nem todos os elementos estavam andando! ex.: chegava no fim do ramo da esq e não voltava
-						cont=cont+1;
-							if(cont<num)
-							{
-							MinHeapify(vet, cont, num);
-							}
-				}
-}
+//void MinHeapify(Aresta *vet, int pos, int num)
+//{
+	//int cont=0;
+	//int e=esquerda(pos);//posição
+	//int d=direita(pos);//posição
+	//int menor=pos, aux;//posição
+		//if(e<num && vet[e]<vet[pos])
+		//{
+			//menor=e;
+		//}
+			//if(d<num && vet[d]<vet[pos])
+			//{
+				//menor=d;
+			//}
+				//if(menor != pos && menor<num)
+				//{
+				//aux=vet[pos];
+					//vet[pos]=vet[menor];
+						//vet[menor]=aux;
+						//MinHeapify(vet, menor, num);
+				//}
+				//else{
+					//cont=pos;//porque nem todos os elementos estavam andando! ex.: chegava no fim do ramo da esq e não voltava
+						//cont=cont+1;
+							//if(cont<num)
+							//{
+							//MinHeapify(vet, cont, num);
+							//}
+				//}
+//}
 
-int *deleta(int *vet, int num, int *vaux)
+Aresta *deleta(Aresta *vet, int num)
 {
-	//imprimeConj(num, vet);
-	int val, i;
+		int i, j=0,u=0, v=0, peso=0;
 		if(num==0)
 		{
 			printf("A HEAP esta vazia!");
-			//return vet;
+			return vet;
 		}
 			else{
-				int *vaux=(int *) malloc(sizeof(int));
-					int j=0;
-					num=num-1;
-						for(i=1;i<=num;i++)
-						{
-							val=vet[0];
-								vaux[j]=vet[i];
-							imprimeConj(j, vaux);	
-							j++;
-						}
-						printf("-->\n");
-						imprimeConj(j, vaux);	
-						free(vet);
-						printf("valor de num%d\n", num);
-							//for(i=0;i<num;i++)
-							//{
-								//MinHeapify(vaux, i, num);
-							//}
-							
-							printf("Valor retirado %d\n", val);
-							printf("<--\n");
-						imprimeConj(j, vaux);	
-			//return vaux;
+				num=num-1;
+						for(i=0;i<num;i++)
+							{
+							u=vet[0].chave_partida;
+								v=vet[0].chave_adjacente;
+									peso=vet[0].peso;
+							vet[i].chave_partida=vet[i+1].chave_partida;
+								vet[i].chave_adjacente=vet[i+1].chave_adjacente;
+									vet[i].peso=vet[i+1].peso;
+							}
+			return vet;
 			}
 }
 
-void raiz(int *vet, int num)
-{
-	int r;
-	if(num>0)
-	{
-		r=vet[0];
-		printf("Raiz da HEAP = %d\n", r);
-	}
-	else{
-		printf("Vazio");
-	}
-}
+//void raiz(int *vet, int num)
+//{
+	//int r;
+	//if(num>0)
+	//{
+		//r=vet[0];
+		//printf("Raiz da HEAP = %d\n", r);
+	//}
+	//else{
+		//printf("Vazio");
+	//}
+//}
 
 
-void ordena(Aresta *vetor)
-{
-		Aresta *auxiliar=vetor->proximo;
-		int peso1=0, peso2=0, troca=0;
-		Aresta *temp=(Aresta*) malloc(sizeof(Aresta));
-			while(auxiliar != NULL)
-			{
-					if(auxiliar->proximo!=NULL)
-					{
-						Aresta *no=auxiliar;
-						while(no!=NULL)
-						{
-						//printf("valor de 1=%d\n", peso1);
-							peso1=no->peso;
-							peso2=no->proximo->peso;
-					//		printf("valor de 2=%d\n", peso2);
-								if(peso2<peso1)
-								{
-								temp->chave_partida=no->proximo->chave_partida;
-									temp->chave_adjacente=no->proximo->chave_adjacente;
-										temp->peso=no->proximo->peso;
-								no->proximo->chave_partida=no->chave_partida;
-									no->proximo->chave_adjacente=no->chave_adjacente;
-										no->proximo->peso=no->peso;
-								no->chave_partida=temp->chave_partida;
-									no->chave_adjacente=temp->chave_adjacente;
-										no->peso=temp->peso;
-								troca=peso2;
-								peso2=peso1;
-								peso1=troca;
-								}
-						no=no->proximo;
-						}
-					}	
-			auxiliar=auxiliar->proximo;
-			}
-}

@@ -32,6 +32,7 @@ int main(void)
 					break;			
 					case 5:
 						kruskal(g);
+					//printf("Valor de arestas contidas no grafo e de=%d\n", g->numArestas);
 					break;
 					//case 6:
 					

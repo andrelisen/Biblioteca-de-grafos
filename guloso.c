@@ -5,64 +5,35 @@
 #include "busca.h"
 #include "heap.h"
 #include "guloso.h"
-
-Aresta *retornaHeap(Grafo *g)
-{
-		Nodo*aux=g->listanodos;
-		Aresta *nova=(Aresta*) malloc(sizeof(Aresta));
-		nova->proximo=NULL;
-		int tam=0;
-			while(aux!=NULL)
-			{
-				criaHeap(nova ,aux->chave, aux->adjacente->chave_adjacente, aux->adjacente->peso);
-					if(aux->adjacente->proximo!=NULL)
-					{
-						Aresta*aux2=aux->adjacente->proximo;
-							while(aux2!=NULL)
-							{
-								criaHeap(nova, aux2->chave_partida, aux2->chave_adjacente, aux2->peso);
-								aux2=aux2->proximo;
-							}
-					}
-				aux=aux->proximo;	
-			}
-			
-return nova;
-}
-
-int tamanhoHeap(Aresta *vetor)
-{
-	Aresta *aux=vetor->proximo;
-	int tam=0;
-		while(aux!=NULL)
-		{
-			tam++;
-			aux=aux->proximo;
-		}
-return tam;
-}
-
-//void kruskal(Grafo *g)
-//{
-	//int tam=g->tamanho;
-	//int *vet=(int *) malloc(tam * sizeof(int));
-	//vet=makeset(tam);
-
-//}
-
 void kruskal(Grafo *g)
 {
-	Aresta *heap=retornaHeap(g);
-	int tamHeap=tamanhoHeap(heap);
-			Aresta *tmp;
-				tmp = heap->proximo;
-					while( tmp != NULL)
-					{
-					printf("%d\t", tmp->chave_partida);
-					printf("%d\t", tmp->chave_adjacente);
-					printf("%d\t", tmp->peso);
-					printf("\n");
-					tmp = tmp->proximo;
-					}
-				printf("---\n"); printf("Tamanho da heap é:%d\n", tamHeap); printf("---\n");
+	int tam=g->numArestas, i=0, cont=0;
+	Aresta *VetOrd=(Aresta*) malloc(tam * sizeof(Aresta));
+		VetOrd=criaHeap(g);
+	Aresta *solucao;	
+		solucao=(Aresta*) malloc(tam * sizeof(Aresta));
+	int *conjunto=(int *) malloc(g->tamanho * sizeof(int));
+		conjunto=makeset(g->tamanho);		
+			while(tam>0)
+			{
+				if(findset(conjunto, VetOrd[i].chave_partida) != findset(conjunto, VetOrd[i].chave_adjacente))
+				{
+						solucao[i].chave_partida=VetOrd[i].chave_partida;
+							solucao[i].chave_adjacente=VetOrd[i].chave_adjacente;
+								solucao[i].peso=VetOrd[i].peso;
+							uniao(conjunto, VetOrd[i].chave_partida,  VetOrd[i].chave_adjacente);	
+							imprimeConj(g->tamanho, conjunto);
+							cont++;
+				}
+				VetOrd=deleta(VetOrd, tam);
+					tam--;
+						i++;
+			}
+			printf("\n***\nAlgoritmo de KRUSKAL\n");
+				for(i=0;i<cont;i++)
+				{
+					printf("[%d]-->%d-->[%d]-->", solucao[i].chave_partida, solucao[i].peso, solucao[i].chave_adjacente);
+				}
+				printf("FIM\n");
+			printf("\n***\n");
 }

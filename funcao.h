@@ -1,6 +1,7 @@
 struct grafo{ 
 	struct nodo *listanodos;
 	int tamanho;
+	int numArestas;
 };typedef struct grafo Grafo;
 struct nodo
 {

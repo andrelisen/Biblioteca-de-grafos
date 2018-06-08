@@ -25,6 +25,7 @@ int i;
 	Grafo *g=(Grafo *) malloc(sizeof(Grafo)); //cria o grafo todo
 	g->tamanho=quantidade; //verificar se aqui não é o tamanho de nodos que estão sendo ligados ou é a quantidade
 	g->listanodos=NULL;
+	g->numArestas=0;
 		for(i=0;i<quantidade;i++) //alocando chave por chave
 		{
 			Nodo *no=(Nodo *) malloc(sizeof(Nodo)); //cria nodo EX.:v[0],v[1]
@@ -71,6 +72,7 @@ void criaAresta(Grafo *g)
 													irma->chave_partida=verifica->chave;
 													irma->peso=p; //valor da sua conexão=peso
 													irma->proximo=NULL; 
+													g->numArestas++;
 													if(verifica->adjacente==NULL)
 													{
 														verifica->adjacente=irma;
