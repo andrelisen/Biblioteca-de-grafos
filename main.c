@@ -13,7 +13,7 @@ int main(void)
 	do{
 		printf("\n------\n");
 		printf("MENU\n");
-		printf("0-Sair\n1-Criar grafo\n2-Imprimir\n3-Busca DFS\n4-Busca BFS\n5-Kruskal\n->Opcao:");
+		printf("0-Sair\n1-Criar grafo\n2-Imprimir\n3-Busca DFS\n4-Busca BFS\n5-Kruskal\n6-Prim\n->Opcao:");
 		scanf("%d", &x);
 			switch (x){
 					case 1:
@@ -31,12 +31,11 @@ int main(void)
 							buscabfs(g);
 					break;			
 					case 5:
-						kruskal(g);
-					//printf("Valor de arestas contidas no grafo e de=%d\n", g->numArestas);
+							kruskal(g);
 					break;
-					//case 6:
-					
-				//	break;
+					case 6:
+							prim(g);
+					break;
 				//	case 7:
 					
 				//	break;

@@ -50,8 +50,7 @@ int findset(int *vet, int j)
 }
 
 //HEAP
-
-Aresta *criaHeap(Grafo *g)
+Aresta *alocaHeap(Grafo *g)
 {
 		Nodo*aux=g->listanodos;
 		int tam=g->numArestas, i=0;
@@ -60,18 +59,20 @@ Aresta *criaHeap(Grafo *g)
 			{
 				if(aux->adjacente!=NULL)
 				{
-				nova[i].chave_partida=aux->adjacente->chave_partida;
-					nova[i].chave_adjacente=aux->adjacente->chave_adjacente;
-						nova[i].peso=aux->adjacente->peso;
+				//nova[i].chave_partida=aux->adjacente->chave_partida;
+					//nova[i].chave_adjacente=aux->adjacente->chave_adjacente;
+						//nova[i].peso=aux->adjacente->peso;
+						nova=criaHeap(nova, aux->adjacente->chave_partida, aux->adjacente->chave_adjacente, aux->adjacente->peso, i);
 				i++;
 					if(aux->adjacente->proximo!=NULL)
 					{
 						Aresta*aux2=aux->adjacente->proximo;
 							while(aux2!=NULL)
 							{
-								nova[i].chave_partida=aux2->chave_partida;
-									nova[i].chave_adjacente=aux2->chave_adjacente;
-										nova[i].peso=aux2->peso;
+								//nova[i].chave_partida=aux2->chave_partida;
+									//nova[i].chave_adjacente=aux2->chave_adjacente;
+										//nova[i].peso=aux2->peso;
+								nova=criaHeap(nova, aux2->chave_partida, aux2->chave_adjacente, aux2->peso, i);
 									i++;
 								aux2=aux2->proximo;
 							}
@@ -92,6 +93,14 @@ Aresta *criaHeap(Grafo *g)
 				//printf("VEZ=%d\t[%d]->[%d]--(%d)\n", i, nova[i].chave_partida, nova[i]. chave_adjacente, nova[i].peso);
 			//}
 return nova;
+}
+
+Aresta *criaHeap(Aresta *vetor, int u, int v, int peso, int posicao)
+{
+	vetor[posicao].chave_partida=u;
+		vetor[posicao].chave_adjacente=v;
+			vetor[posicao].peso=peso;
+				return vetor;
 }
 
 void percorre(Aresta *vet, int tam)
@@ -184,17 +193,56 @@ Aresta *deleta(Aresta *vet, int num)
 			}
 }
 
-//void raiz(int *vet, int num)
-//{
-	//int r;
-	//if(num>0)
-	//{
-		//r=vet[0];
-		//printf("Raiz da HEAP = %d\n", r);
-	//}
-	//else{
-		//printf("Vazio");
-	//}
-//}
 
+Aresta *raiz(Aresta *vet, int num)
+{
+	Aresta *retorno=(Aresta*) malloc(1 * sizeof(Aresta));
+	if(num>0)
+	{
+		retorno[0].chave_partida=vet[0].chave_partida;
+			retorno[0].chave_adjacente=vet[0].chave_adjacente;
+				retorno[0].peso=vet[0].peso;
+		//r=vet[0].chave_partida;
+	//	printf("Raiz da HEAP = %d\n", r);
+	return retorno;
+	}
+}
+
+Aresta *heapPrior(Grafo *g, int valor, Aresta *adj)
+{
+	Nodo *no=g->listanodos;
+		int tam=g->numArestas, i=0;
+			tam=tam-1;
+			//	Aresta *adj=(Aresta*) malloc(tam * sizeof(Aresta)); //maximo de vertices ligados nesse nodo é de TAM-1
+		while(no!=NULL)
+		{
+			if(no->adjacente!=NULL)
+			{
+				if(no->adjacente->chave_partida == valor)
+				{
+					//adjacente[i].chave_partida=no->adjacente->chave_partida;
+						//adjacente[i].chave_adjacente=no->adjacente->chave_partida;
+							//adjacente[i].peso=no->adjacente->peso;
+					adj=criaHeap(adj, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, i);
+					i++;	
+						if(no->adjacente->proximo!=NULL)
+						{
+							Aresta *no2=no->adjacente->proximo;
+								while(no2!=NULL)
+								{
+									//adjacente[i].chave_partida=no2->chave_partida;
+										//adjacente[i].chave_adjacente=no2->chave_partida;
+											//adjacente[i].peso=no2->peso;								
+								adj=criaHeap(adj, no2->chave_partida, no2->chave_adjacente, no2->peso, i);
+								i++;
+								no2=no2->proximo;
+								}
+						}
+				}
+			}
+		no=no->proximo;
+		}
+			percorre(adj, i);
+return adj;
+}
 
