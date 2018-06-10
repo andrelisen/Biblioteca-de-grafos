@@ -8,7 +8,7 @@
 int *makeset(int qnt) //criando o "conjunto"
 {
 	int  i;
-	int *conjA=(int*) malloc(sizeof(int));
+	int *conjA=(int*) malloc(qnt * sizeof(int));
 		for(i=0;i<qnt;i++)
 		{
 		conjA[i]=i;	
@@ -50,57 +50,32 @@ int findset(int *vet, int j)
 }
 
 //HEAP
-Aresta *alocaHeap(Grafo *g)
-{
-		Nodo*aux=g->listanodos;
-		int tam=g->numArestas, i=0;
-		Aresta *nova=(Aresta*) malloc(tam*sizeof(Aresta));
-			while(aux!=NULL)
-			{
-				if(aux->adjacente!=NULL)
-				{
-				//nova[i].chave_partida=aux->adjacente->chave_partida;
-					//nova[i].chave_adjacente=aux->adjacente->chave_adjacente;
-						//nova[i].peso=aux->adjacente->peso;
-						nova=criaHeap(nova, aux->adjacente->chave_partida, aux->adjacente->chave_adjacente, aux->adjacente->peso, i);
-				i++;
-					if(aux->adjacente->proximo!=NULL)
-					{
-						Aresta*aux2=aux->adjacente->proximo;
-							while(aux2!=NULL)
-							{
-								//nova[i].chave_partida=aux2->chave_partida;
-									//nova[i].chave_adjacente=aux2->chave_adjacente;
-										//nova[i].peso=aux2->peso;
-								nova=criaHeap(nova, aux2->chave_partida, aux2->chave_adjacente, aux2->peso, i);
-									i++;
-								aux2=aux2->proximo;
-							}
-					}	
-				}
-				aux=aux->proximo;
-			}	
-				//printf("--ANTES--\n");
-			//for(i=0;i<tam;i++)
-			//{
-				//printf("VEZ=%d\t[%d]->[%d]--(%d)\n", i, nova[i].chave_partida, nova[i]. chave_adjacente, nova[i].peso);
-			//}
-	//printf("\n--\nValor =%d\n---\n", tam);
-		percorre(nova, tam);
-				//printf("--DEPOIS--\n");
-			//for(i=0;i<tam;i++)
-			//{
-				//printf("VEZ=%d\t[%d]->[%d]--(%d)\n", i, nova[i].chave_partida, nova[i]. chave_adjacente, nova[i].peso);
-			//}
-return nova;
-}
 
-Aresta *criaHeap(Aresta *vetor, int u, int v, int peso, int posicao)
+Aresta *criaHeap(Aresta *vetor, int u, int v, int peso, int quantidade, int tam)
 {
-	vetor[posicao].chave_partida=u;
-		vetor[posicao].chave_adjacente=v;
-			vetor[posicao].peso=peso;
-				return vetor;
+	Aresta *vet=(Aresta*) malloc(tam * sizeof(Aresta));
+	int i=0, quant=quantidade; 
+					quant=quant-1;               
+		if(quantidade==1) 
+		{
+			vet[0].chave_partida=u;
+				vet[0].chave_adjacente=v;
+					vet[0].peso=peso;
+						return vet;
+		}
+		else{
+			  		while(i<quant)
+					{
+						vet[i].chave_partida=vetor[i].chave_partida;
+							vet[i].chave_adjacente=vetor[i].chave_adjacente;
+								vet[i].peso=vetor[i].peso;	
+					i++;
+					}
+					vet[i].chave_partida=u;
+						vet[i].chave_adjacente=v;
+							vet[i].peso=peso;
+			return vet;
+		}
 }
 
 void percorre(Aresta *vet, int tam)
@@ -125,6 +100,77 @@ void percorre(Aresta *vet, int tam)
 			}
 		}
 }
+
+Aresta *deleta(Aresta *vetor, int num)
+{
+	int i, j=0,cont=num;	
+		num=num-1;
+			if(num==0)
+			{
+		//		printf("A HEAP esta vazia!");
+					return vetor;
+			}
+			else{
+			//	Aresta *vet=(Aresta*) malloc(num * sizeof(Aresta));
+							for(i=1;i<=cont;i++)
+							{
+							vetor[j].chave_partida=vetor[i].chave_partida;
+								vetor[j].chave_adjacente=vetor[i].chave_adjacente;
+									vetor[j].peso=vetor[i].peso;
+							j++;
+							}
+			percorre(vetor, num);
+			return vetor;
+			}
+}
+
+Aresta *raiz(Aresta *vet, int num)
+{
+	Aresta *retorno=(Aresta*) malloc(1 * sizeof(Aresta));
+	if(num>0)
+	{
+		retorno[0].chave_partida=vet[0].chave_partida;
+			retorno[0].chave_adjacente=vet[0].chave_adjacente;
+				retorno[0].peso=vet[0].peso;
+		//r=vet[0].chave_partida;
+	//	printf("Raiz da HEAP = %d\n", r);
+	return retorno;
+	}
+}
+
+//Aresta *heapPrior(Aresta *adj, Grafo *g, int valor)  //retorna quantidade, aloca o vetor dentro da func do prim
+//{
+		//int i=qnt;
+			//Nodo *no=g->listanodos;
+			//while(no!=NULL)
+		//{
+			//if(no->adjacente!=NULL)
+			//{
+				//if(no->adjacente->chave_partida == valor)
+				//{
+					//qnt++;
+					//adj=criaHeap(adj, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, i, qnt, g->numArestas);
+							//i++;	
+						//if(no->adjacente->proximo!=NULL)
+						//{
+							//Aresta *no2=no->adjacente->proximo;
+								//while(no2!=NULL)
+								//{
+									//qnt++;
+								//adj=criaHeap(adj, no2->chave_partida, no2->chave_adjacente, no2->peso, i, qnt, g->numArestas);
+								//i++;
+								//no2=no2->proximo;
+								//}
+						//}
+				//}
+			//}
+		//no=no->proximo;
+		//}
+			//percorre(adj, qnt);
+	//return adj;
+//}
+
+
 //int esquerda(int pos)
 //{
 	//int aux;
@@ -169,80 +215,3 @@ void percorre(Aresta *vet, int tam)
 							//}
 				//}
 //}
-
-Aresta *deleta(Aresta *vet, int num)
-{
-		int i, j=0,u=0, v=0, peso=0;
-		if(num==0)
-		{
-			printf("A HEAP esta vazia!");
-			return vet;
-		}
-			else{
-				num=num-1;
-						for(i=0;i<num;i++)
-							{
-							u=vet[0].chave_partida;
-								v=vet[0].chave_adjacente;
-									peso=vet[0].peso;
-							vet[i].chave_partida=vet[i+1].chave_partida;
-								vet[i].chave_adjacente=vet[i+1].chave_adjacente;
-									vet[i].peso=vet[i+1].peso;
-							}
-			return vet;
-			}
-}
-
-
-Aresta *raiz(Aresta *vet, int num)
-{
-	Aresta *retorno=(Aresta*) malloc(1 * sizeof(Aresta));
-	if(num>0)
-	{
-		retorno[0].chave_partida=vet[0].chave_partida;
-			retorno[0].chave_adjacente=vet[0].chave_adjacente;
-				retorno[0].peso=vet[0].peso;
-		//r=vet[0].chave_partida;
-	//	printf("Raiz da HEAP = %d\n", r);
-	return retorno;
-	}
-}
-
-Aresta *heapPrior(Grafo *g, int valor, Aresta *adj)
-{
-	Nodo *no=g->listanodos;
-		int tam=g->numArestas, i=0;
-			tam=tam-1;
-			//	Aresta *adj=(Aresta*) malloc(tam * sizeof(Aresta)); //maximo de vertices ligados nesse nodo é de TAM-1
-		while(no!=NULL)
-		{
-			if(no->adjacente!=NULL)
-			{
-				if(no->adjacente->chave_partida == valor)
-				{
-					//adjacente[i].chave_partida=no->adjacente->chave_partida;
-						//adjacente[i].chave_adjacente=no->adjacente->chave_partida;
-							//adjacente[i].peso=no->adjacente->peso;
-					adj=criaHeap(adj, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, i);
-					i++;	
-						if(no->adjacente->proximo!=NULL)
-						{
-							Aresta *no2=no->adjacente->proximo;
-								while(no2!=NULL)
-								{
-									//adjacente[i].chave_partida=no2->chave_partida;
-										//adjacente[i].chave_adjacente=no2->chave_partida;
-											//adjacente[i].peso=no2->peso;								
-								adj=criaHeap(adj, no2->chave_partida, no2->chave_adjacente, no2->peso, i);
-								i++;
-								no2=no2->proximo;
-								}
-						}
-				}
-			}
-		no=no->proximo;
-		}
-			percorre(adj, i);
-return adj;
-}
-

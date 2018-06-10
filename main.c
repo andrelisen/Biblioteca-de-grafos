@@ -8,8 +8,9 @@
 
 int main(void)
 {
-	int x, y, val;
+	int x, y, val, i=0, qnt=0;
 	Grafo *g;
+					Aresta*vetor=(Aresta *) malloc( g->numArestas * sizeof(Aresta));
 	do{
 		printf("\n------\n");
 		printf("MENU\n");
