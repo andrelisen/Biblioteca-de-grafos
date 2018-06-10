@@ -33,28 +33,15 @@ void kruskal(Grafo *g)
 					}
 					aux=aux->proximo;
 				}	
-		for(i=0;i<qnt;i++)
-			{
-				printf("%d,%d=%d\n", VetOrd[i].chave_partida, VetOrd[i].chave_adjacente, VetOrd[i].peso);
-			}
 			percorre(VetOrd, qnt);
-			printf("percorreu\n");
-			for(i=0;i<qnt;i++)
-			{
-				printf("%d,%d=%d\n", VetOrd[i].chave_partida, VetOrd[i].chave_adjacente, VetOrd[i].peso);
-			}
 				while(qnt>0)
 				{
-				//	printf("WHILE:%d,%d=%d\n", VetOrd[0].chave_partida, VetOrd[0].chave_adjacente, VetOrd[0].peso);
 					if(findset(conjunto, VetOrd[0].chave_partida) != findset(conjunto, VetOrd[0].chave_adjacente))
 					{
 							solucao[cont].chave_partida=VetOrd[0].chave_partida;
 								solucao[cont].chave_adjacente=VetOrd[0].chave_adjacente;
 									solucao[cont].peso=VetOrd[0].peso;
-					//		printf("conj antes\n");
-					//		imprimeConj(tam2, conjunto);
 								uniao(conjunto, VetOrd[0].chave_partida,  VetOrd[0].chave_adjacente);	
-					//		printf("conj depois\n");
 									cont++;
 					}
 					VetOrd=deleta(VetOrd, qnt);
@@ -86,17 +73,15 @@ void prim(Grafo *g)
 							{
 								if(no->adjacente->chave_partida == prioridade)
 								{
-									qnt++; //numero de elementos que já foram inseridos na minha heap
+									qnt=qnt+1; 
 										VetPrior=criaHeap(VetPrior, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);
-						//					i++;	
 									if(no->adjacente->proximo!=NULL)
 									{
 									Aresta *no2=no->adjacente->proximo;
 										while(no2!=NULL)
 										{
-										qnt++;
+										qnt=qnt+1;
 											VetPrior=criaHeap(VetPrior, no2->chave_partida, no2->chave_adjacente, no2->peso, qnt, g->numArestas);
-									//			i++;
 										no2=no2->proximo;
 										}
 									}
@@ -105,55 +90,53 @@ void prim(Grafo *g)
 						no=no->proximo;
 						}
 						percorre(VetPrior, qnt);		
-				while(qnt>0)
-				{
-					if(findset(conjunto, VetPrior[0].chave_partida) != findset(conjunto, VetPrior[0].chave_adjacente))
+							while(qnt>0)
 							{
-								solucao[cont].chave_partida=VetPrior[0].chave_partida;
-									solucao[cont].chave_adjacente=VetPrior[0].chave_adjacente;
-										solucao[cont].peso=VetPrior[0].peso;
-											cont++;
-								uniao(conjunto, VetPrior[0].chave_partida, VetPrior[0].chave_adjacente);
-									prioridade=VetPrior[0].chave_adjacente;
-										VetPrior=deleta(VetPrior, qnt);
-											qnt--;
-											entrou=1;
-							}
-							else{
-								VetPrior=deleta(VetPrior, qnt);
-									qnt--;
-									entrou=0;
-							}
-							if(entrou==1)
+								if(findset(conjunto, VetPrior[0].chave_partida) != findset(conjunto, VetPrior[0].chave_adjacente))
 								{
-							Nodo *no=g->listanodos; //quando tem prioridade e eu preciso inserir os adjacentes da heap nele!
-								while(no->proximo!=NULL)
-								{
-									if(no->adjacente!=NULL)
-									{
-										if(no->adjacente->chave_partida == prioridade)
-										{
-										qnt++; //numero de elementos que já foram inseridos na minha heap
-											VetPrior=criaHeap(VetPrior, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);	
-												i++;
-											if(no->adjacente->proximo!=NULL) // se nao tem adj de nada adianta né!
-											{
-												Aresta *no2=no->adjacente->proximo;
-												while(no2!=NULL)
-												{
-												qnt++;
-													VetPrior=criaHeap(VetPrior, no2->chave_partida, no2->chave_adjacente, no2->peso, qnt, g->numArestas);
-														i++;
-												no2=no2->proximo;
-												}
-											}
-										}
-									}
-									no=no->proximo;
+									solucao[cont].chave_partida=VetPrior[0].chave_partida;
+										solucao[cont].chave_adjacente=VetPrior[0].chave_adjacente;
+											solucao[cont].peso=VetPrior[0].peso;
+												cont++;
+									uniao(conjunto, VetPrior[0].chave_partida, VetPrior[0].chave_adjacente);
+										prioridade=VetPrior[0].chave_adjacente;
+											VetPrior=deleta(VetPrior, qnt);
+												qnt=qnt-1;
+													entrou=1;
 								}
+								else
+								{
+								VetPrior=deleta(VetPrior, qnt);
+									qnt=qnt-1;
+										entrou=0;
+								}
+									if(entrou==1)
+									{
+										Nodo *no=g->listanodos; 
+											while(no->proximo!=NULL)
+											{
+												if(no->adjacente!=NULL)
+												{
+													if(no->adjacente->chave_partida == prioridade)
+													{
+													qnt=qnt+1; 
+														VetPrior=criaHeap(VetPrior, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);	
+														if(no->adjacente->proximo!=NULL) // se nao tem adj de nada adianta né!
+														{
+														Aresta *no2=no->adjacente->proximo;
+															while(no2!=NULL)
+															{
+															qnt=qnt+1;
+																VetPrior=criaHeap(VetPrior, no2->chave_partida, no2->chave_adjacente, no2->peso, qnt, g->numArestas);
+																	no2=no2->proximo;
+															}
+														}
+													}
+												}
+											no=no->proximo;
+											}
 									percorre(VetPrior, qnt);
-							}
-					
+									}
 				}
 				printf("\n***\nAlgoritmo de PRIM\n***\n");
 					for(i=0;i<cont;i++)
