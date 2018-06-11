@@ -107,11 +107,9 @@ Aresta *deleta(Aresta *vetor, int num)
 		num=num-1;
 			if(num==0)
 			{
-		//		printf("A HEAP esta vazia!");
 					return vetor;
 			}
 			else{
-			//	Aresta *vet=(Aresta*) malloc(num * sizeof(Aresta));
 							for(i=1;i<=cont;i++)
 							{
 							vetor[j].chave_partida=vetor[i].chave_partida;
@@ -132,86 +130,6 @@ Aresta *raiz(Aresta *vet, int num)
 		retorno[0].chave_partida=vet[0].chave_partida;
 			retorno[0].chave_adjacente=vet[0].chave_adjacente;
 				retorno[0].peso=vet[0].peso;
-		//r=vet[0].chave_partida;
-	//	printf("Raiz da HEAP = %d\n", r);
 	return retorno;
 	}
 }
-
-//Aresta *heapPrior(Aresta *adj, Grafo *g, int valor)  //retorna quantidade, aloca o vetor dentro da func do prim
-//{
-		//int i=qnt;
-			//Nodo *no=g->listanodos;
-			//while(no!=NULL)
-		//{
-			//if(no->adjacente!=NULL)
-			//{
-				//if(no->adjacente->chave_partida == valor)
-				//{
-					//qnt++;
-					//adj=criaHeap(adj, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, i, qnt, g->numArestas);
-							//i++;	
-						//if(no->adjacente->proximo!=NULL)
-						//{
-							//Aresta *no2=no->adjacente->proximo;
-								//while(no2!=NULL)
-								//{
-									//qnt++;
-								//adj=criaHeap(adj, no2->chave_partida, no2->chave_adjacente, no2->peso, i, qnt, g->numArestas);
-								//i++;
-								//no2=no2->proximo;
-								//}
-						//}
-				//}
-			//}
-		//no=no->proximo;
-		//}
-			//percorre(adj, qnt);
-	//return adj;
-//}
-
-
-//int esquerda(int pos)
-//{
-	//int aux;
-	//aux=2*pos+1;
-	//return aux;
-//}
-
-//int direita(int pos)
-//{
-	//int aux;
-	//aux=2*pos+2;
-	//return aux;
-//}
-
-//void MinHeapify(Aresta *vet, int pos, int num)
-//{
-	//int cont=0;
-	//int e=esquerda(pos);//posição
-	//int d=direita(pos);//posição
-	//int menor=pos, aux;//posição
-		//if(e<num && vet[e]<vet[pos])
-		//{
-			//menor=e;
-		//}
-			//if(d<num && vet[d]<vet[pos])
-			//{
-				//menor=d;
-			//}
-				//if(menor != pos && menor<num)
-				//{
-				//aux=vet[pos];
-					//vet[pos]=vet[menor];
-						//vet[menor]=aux;
-						//MinHeapify(vet, menor, num);
-				//}
-				//else{
-					//cont=pos;//porque nem todos os elementos estavam andando! ex.: chegava no fim do ramo da esq e não voltava
-						//cont=cont+1;
-							//if(cont<num)
-							//{
-							//MinHeapify(vet, cont, num);
-							//}
-				//}
-//}
