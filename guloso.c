@@ -15,7 +15,7 @@ void kruskal(Grafo *g)
 			conjunto=makeset(tam2);		
 		Aresta *VetOrd=(Aresta*) malloc(tam * sizeof(Aresta));
 			Nodo*aux=g->listanodos;
-				while(aux!=NULL)
+				while(aux!=NULL) //percorro o Grafo para inserir as arestas
 				{
 					if(aux->adjacente!=NULL)
 					{
@@ -34,10 +34,10 @@ void kruskal(Grafo *g)
 					}
 					aux=aux->proximo;
 				}	
-			percorre(VetOrd, qnt);
-				while(qnt>0)
+			percorre(VetOrd, qnt); //Faço a ordenação do vetor do tipo aresta com os PESOS em ordem crescente --> menor > maior
+				while(qnt>0) //enquanto a heap estiver com elementos
 				{
-					if(findset(conjunto, VetOrd[0].chave_partida) != findset(conjunto, VetOrd[0].chave_adjacente))
+					if(findset(conjunto, VetOrd[0].chave_partida) != findset(conjunto, VetOrd[0].chave_adjacente)) //Verifica se já não está na solução
 					{
 							solucao[cont].chave_partida=VetOrd[0].chave_partida;
 								solucao[cont].chave_adjacente=VetOrd[0].chave_adjacente;
@@ -67,7 +67,7 @@ void prim(Grafo *g)
 		printf("De qual nodo deseja iniciar? ");
 			scanf("%d", &prioridade);
 		Aresta *VetPrior=(Aresta*) malloc(tam * sizeof(Aresta));
-					Nodo *no=g->listanodos; //quando tem prioridade e eu preciso inserir os adjacentes da heap nele!
+					Nodo *no=g->listanodos; 
 						while(no!=NULL)
 						{
 							if(no->adjacente!=NULL)
@@ -95,7 +95,6 @@ void prim(Grafo *g)
 							{
 								Aresta *temporaria=(Aresta*) malloc(1 * sizeof(Aresta));
 									temporaria=raiz(VetPrior, qnt);
-										printf("%d,%d=%d\n", temporaria[0].chave_partida, temporaria[0].chave_adjacente, temporaria[0].peso);
 								if(findset(conjunto, VetPrior[0].chave_partida) != findset(conjunto, VetPrior[0].chave_adjacente))
 								{
 									solucao[cont].chave_partida=VetPrior[0].chave_partida;
@@ -125,7 +124,7 @@ void prim(Grafo *g)
 													{
 													qnt=qnt+1; 
 														VetPrior=criaHeap(VetPrior, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);	
-														if(no->adjacente->proximo!=NULL) // se nao tem adj de nada adianta né!
+														if(no->adjacente->proximo!=NULL) 
 														{
 														Aresta *no2=no->adjacente->proximo;
 															while(no2!=NULL)
@@ -155,11 +154,11 @@ void dijkstra(Grafo *g)
 	int tam=g->tamanho, tam2=g->numArestas, i=0, qnt=0, prioridade=0, cont=0, entrei=0, u=0, v=0, peso=0;
 		int *distancia=(int*) malloc(tam * sizeof(int));
 			int *antecessor=(int*) malloc(tam * sizeof(int));
-		//distancia=INT_MAX/2; ---> infinito
+		//distancia=INT_MAX; ---> infinito
 		for(i=0;i<tam;i++)
 		{
 			distancia[i]=INT_MAX;
-				antecessor[i]=-1; //inicializa todos com nenhum antecessor ou poderia colocar 0-->pensar
+				antecessor[i]=-1; //inicializa todos com nenhum antecessor 
 		}
 		int *solucao;
 			solucao=(int*) malloc(tam * sizeof(int));
@@ -172,7 +171,7 @@ void dijkstra(Grafo *g)
 				Nodo *no=g->listanodos; 
 				printf("De qual nodo deseja iniciar o algoritmo?");
 				scanf("%d", &prioridade);
-					while(no->proximo!=NULL)
+					while(no->proximo!=NULL)   //adjacente do nodo inicial
 					{
 						if(no->adjacente!=NULL)
 						{
@@ -180,7 +179,7 @@ void dijkstra(Grafo *g)
 							{
 								qnt=qnt+1; 
 									heap=criaHeap(heap, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);	
-										if(no->adjacente->proximo!=NULL) // se nao tem adj de nada adianta né!
+										if(no->adjacente->proximo!=NULL) 
 										{
 										Aresta *no2=no->adjacente->proximo;
 											while(no2!=NULL)
@@ -214,44 +213,45 @@ void dijkstra(Grafo *g)
 							cont++;
 							antecessor[v] = u; //v=u
 								distancia[v] = distancia[u] + peso;
-								prioridade = v;
+								prioridade = v; //atualiza a prioridade para que tenha novos adjacentes
 									entrei=1;
 							}
-							else{
-								entrei=0;
-							}
-							if(entrei==1)
-									{
-										Nodo *no=g->listanodos; 
-											while(no->proximo!=NULL)
-											{
-												if(no->adjacente!=NULL)
+								else
+								{
+									entrei=0;
+								}
+									if(entrei==1)
+										{
+											Nodo *no=g->listanodos; 
+												while(no->proximo!=NULL)
 												{
-													if(no->adjacente->chave_partida == prioridade)
+													if(no->adjacente!=NULL)
 													{
-													qnt=qnt+1; 
-														heap=criaHeap(heap, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);	
-														if(no->adjacente->proximo!=NULL) 
+														if(no->adjacente->chave_partida == prioridade)
 														{
-														Aresta *no2=no->adjacente->proximo;
-															while(no2!=NULL)
+														qnt=qnt+1; 
+															heap=criaHeap(heap, no->adjacente->chave_partida, no->adjacente->chave_adjacente, no->adjacente->peso, qnt, g->numArestas);	
+															if(no->adjacente->proximo!=NULL) 
 															{
-															qnt=qnt+1;
-																heap=criaHeap(heap, no2->chave_partida, no2->chave_adjacente, no2->peso, qnt, g->numArestas);
-																	no2=no2->proximo;
+															Aresta *no2=no->adjacente->proximo;
+																while(no2!=NULL)
+																{
+																qnt=qnt+1;
+																	heap=criaHeap(heap, no2->chave_partida, no2->chave_adjacente, no2->peso, qnt, g->numArestas);
+																		no2=no2->proximo;
+																}
 															}
 														}
 													}
+												no=no->proximo;
 												}
-											no=no->proximo;
-											}
-									percorre(heap, qnt);
-									}
-					}	
+										percorre(heap, qnt);
+										}
+						}		
 					printf("Algoritmo de DIJKSTRA\n");
 			for(i=0;i<cont;i++)
 			{
-				printf("%d->", solucao[i]);
+				printf("[%d]--|%d|-->", solucao[i], distancia[i]);
 			}
 			printf("FIM\n");
 }

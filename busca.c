@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "funcao.h"
 #include "busca.h"
 #include "heap.h"
 #include "guloso.h"
 //DFS
+
 pilha *criapilha(void)
 {
 	pilha *novo=(pilha*)malloc(sizeof(pilha));

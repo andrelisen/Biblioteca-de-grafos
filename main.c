@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "funcao.h"
 #include "busca.h"
 #include "heap.h"
@@ -8,9 +9,8 @@
 
 int main(void)
 {
-	int x, y, val, i=0, qnt=0;
+	int x, y;
 	Grafo *g;
-					Aresta*vetor=(Aresta *) malloc( g->numArestas * sizeof(Aresta));
 	do{
 		printf("\n------\n");
 		printf("MENU\n");

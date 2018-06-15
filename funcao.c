@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "funcao.h"
 #include "busca.h"
 #include "heap.h"
 #include "guloso.h"
+
 int quantidade(void) //lê a quantidade de vertices e retorna ela 
 {
 FILE *arquivo;
@@ -72,7 +74,7 @@ void criaAresta(Grafo *g)
 													irma->chave_partida=verifica->chave;
 													irma->peso=p; //valor da sua conexão=peso
 													irma->proximo=NULL; 
-													g->numArestas++;
+													g->numArestas++; //ætualização do numero de arestas => caminho entre os nodos
 													if(verifica->adjacente==NULL)
 													{
 														verifica->adjacente=irma;
@@ -119,7 +121,7 @@ void imprimeGrafo(Grafo *g)
 			{
 			printf("-->");
 			printf("%d ", percorre->adjacente->chave_adjacente);
-			printf("(%d)", percorre->adjacente->peso);
+			printf("[%d]", percorre->adjacente->peso);
 				if(percorre->adjacente->proximo!=NULL) //o que estava acontecendo: estava 'sobrescrevendo' o prox adjacente do meu nodo, via o 1 e dps perdia o resto
 				{
 					Aresta *aux=percorre->adjacente->proximo;
@@ -127,7 +129,7 @@ void imprimeGrafo(Grafo *g)
 					{
 					printf("-->");
 					printf("%d", aux->chave_adjacente);
-					printf("(%d)", aux->peso);
+					printf("[%d]", aux->peso);
 					aux=aux->proximo;
 					}	
 				}
@@ -139,5 +141,4 @@ void imprimeGrafo(Grafo *g)
 			printf("\n");	
 			percorre=percorre->proximo;
 	}
-	//(percorre);
 }
