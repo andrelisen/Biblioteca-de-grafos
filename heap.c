@@ -33,14 +33,29 @@ void imprimeConj(int num, int *vet)
 }
 
 
-void uniao(int *vet, int i, int j)
+int *uniao(int *vet, int i, int j) // [1]=2,[5]          0 é menor que 1
 {
-	vet[i]=findset(vet, j);
+		if(i<j) //i é o representante
+		{
+		vet[j]=findset(vet, i);		
+//		vet[i]=findset(vet, j);
+		}
+			if(i>j)
+			{
+				vet[i]=findset(vet, j); //1=2-->2,2 
+			//	vet[j]=findset(vet, i);
+			}
+			//				vet[i]=findset(vet, i);
+		//	vet[j]=findset(vet, i);
+		//		vet[i]=findset(vet, j);
+		//vet[i]=findset(vet, i);
+		//	vet[j]=findset(vet, j);
+				return vet;
 }
 
-int findset(int *vet, int j)
+int findset(int *vet, int j) //
 {
-	if(vet[j]==j)
+	if(vet[j]==j) 
 	{
 		return j;
 	}
@@ -111,7 +126,7 @@ Aresta *deleta(Aresta *vetor, int num)
 					return vetor;
 			}
 			else{
-							for(i=1;i<=cont;i++)
+							for(i=1;i<=cont;i++) 
 							{
 							vetor[j].chave_partida=vetor[i].chave_partida;
 								vetor[j].chave_adjacente=vetor[i].chave_adjacente;

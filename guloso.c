@@ -8,14 +8,14 @@
 #include "guloso.h"
 void kruskal(Grafo *g)
 {
-	int i=0, cont=0, qnt=0, tam=g->numArestas, tam2=g->tamanho;
+	int i=0, cont=0, qnt=0, tam=g->numArestas, tam2=g->tamanho, x=0, y=0;
 		Aresta *solucao;	
 			solucao=(Aresta*) malloc(tam * sizeof(Aresta));
 		int *conjunto=(int *) malloc(tam2 * sizeof(int));
 			conjunto=makeset(tam2);		
 		Aresta *VetOrd=(Aresta*) malloc(tam * sizeof(Aresta));
 			Nodo*aux=g->listanodos;
-				while(aux!=NULL) //percorro o Grafo para inserir as arestas
+				while(aux!=NULL) //percorro o Grafo para inserir as arestas TODAS
 				{
 					if(aux->adjacente!=NULL)
 					{
@@ -37,12 +37,16 @@ void kruskal(Grafo *g)
 			percorre(VetOrd, qnt); //Faço a ordenação do vetor do tipo aresta com os PESOS em ordem crescente --> menor > maior
 				while(qnt>0) //enquanto a heap estiver com elementos
 				{
-					if(findset(conjunto, VetOrd[0].chave_partida) != findset(conjunto, VetOrd[0].chave_adjacente)) //Verifica se já não está na solução
+					x=findset(conjunto, VetOrd[0].chave_partida);
+						y=findset(conjunto, VetOrd[0].chave_adjacente);
+					//if(findset(conjunto, VetOrd[0].chave_partida) != findset(conjunto, VetOrd[0].chave_adjacente)) //Verifica se já não está na solução
+					if(x!=y)
 					{
 							solucao[cont].chave_partida=VetOrd[0].chave_partida;
 								solucao[cont].chave_adjacente=VetOrd[0].chave_adjacente;
 									solucao[cont].peso=VetOrd[0].peso;
-								uniao(conjunto, VetOrd[0].chave_partida,  VetOrd[0].chave_adjacente);	
+								conjunto=uniao(conjunto, x, y);	
+					//	conjunto=uniao(conjunto, VetOrd[0].chave_partida, VetOrd[0].chave_adjacente);
 									cont++;
 					}
 					VetOrd=deleta(VetOrd, qnt);
@@ -54,12 +58,12 @@ void kruskal(Grafo *g)
 						printf("[%d]-->%d-->[%d]-->", solucao[i].chave_partida, solucao[i].peso, solucao[i].chave_adjacente);
 					}
 					printf("FIM\n");
-				printf("\n***\n");
+				printf("***\n");
 }
 
 void prim(Grafo *g)
 {
-	int tam=g->numArestas, prioridade=0, i=0, qnt=0, entrou=0, cont=0;
+	int tam=g->numArestas, prioridade=0, i=0, qnt=0, entrou=0, cont=0, x=0, y=0;
 		Aresta *solucao;	
 			solucao=(Aresta*) malloc(tam * sizeof(Aresta));
 		int *conjunto=(int *) malloc(g->tamanho * sizeof(int));
@@ -67,8 +71,8 @@ void prim(Grafo *g)
 		printf("De qual nodo deseja iniciar? ");
 			scanf("%d", &prioridade);
 		Aresta *VetPrior=(Aresta*) malloc(tam * sizeof(Aresta));
-					Nodo *no=g->listanodos; 
-						while(no!=NULL)
+					Nodo *no=g->listanodos; 			
+						while(no!=NULL) //Utilizando somente os adjacentes do nodo inicial
 						{
 							if(no->adjacente!=NULL)
 							{
@@ -95,22 +99,28 @@ void prim(Grafo *g)
 							{
 								Aresta *temporaria=(Aresta*) malloc(1 * sizeof(Aresta));
 									temporaria=raiz(VetPrior, qnt);
-								if(findset(conjunto, VetPrior[0].chave_partida) != findset(conjunto, VetPrior[0].chave_adjacente))
-								{
-									solucao[cont].chave_partida=VetPrior[0].chave_partida;
-										solucao[cont].chave_adjacente=VetPrior[0].chave_adjacente;
-											solucao[cont].peso=VetPrior[0].peso;
-												cont++;
-									uniao(conjunto, VetPrior[0].chave_partida, VetPrior[0].chave_adjacente);
-										prioridade=VetPrior[0].chave_adjacente;
-											VetPrior=deleta(VetPrior, qnt);
+										VetPrior=deleta(VetPrior, qnt);
 												qnt=qnt-1;
+								x=findset(conjunto, temporaria[0].chave_partida);
+									y=findset(conjunto, temporaria[0].chave_adjacente);
+							//	if(findset(conjunto, temporaria[0].chave_partida) != findset(conjunto, temporaria[0].chave_adjacente))
+								if(x != y)
+								{
+						//			printf("Valores de findset=%d, %d\n", findset(conjunto, temporaria[0].chave_partida), findset(conjunto, temporaria[0].chave_adjacente));
+									solucao[cont].chave_partida=temporaria[0].chave_partida;
+										solucao[cont].chave_adjacente=temporaria[0].chave_adjacente;
+											solucao[cont].peso=temporaria[0].peso;
+												cont++;
+								conjunto =	uniao(conjunto, x, y); //ASSIM FUNCIONA
+							//	conjunto=uniao(conjunto, temporaria[0].chave_partida, temporaria[0].chave_adjacente); //ENGRAÇADO QUE ASSIM NÃO FUNCIONA
+										prioridade=temporaria[0].chave_adjacente;
 													entrou=1;
+								//	printf("\n===\nValores=%d, %d=%d\n", temporaria[0].chave_partida, temporaria[0].chave_adjacente, temporaria[0].peso);
 								}
 								else
 								{
-								VetPrior=deleta(VetPrior, qnt);
-									qnt=qnt-1;
+							//	VetPrior=deleta(VetPrior, qnt);
+							//		qnt=qnt-1;
 										entrou=0;
 								}
 									if(entrou==1)
@@ -142,16 +152,18 @@ void prim(Grafo *g)
 									}
 				}
 				printf("\n***\nAlgoritmo de PRIM\n***\n");
+				printf("%d->", solucao[0].chave_partida);
 					for(i=0;i<cont;i++)
 					{
-						printf("[%d]-->%d-->[%d]-->", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
+				//		printf("[%d]-->%d-->[%d]..", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
+					printf("%d->", solucao[i].chave_adjacente);
 					}
-						printf("FIM\n");
+						printf("FIM\n***\n");
 }
 
 void dijkstra(Grafo *g)
 {
-	int tam=g->tamanho, tam2=g->numArestas, i=0, qnt=0, prioridade=0, cont=0, entrei=0, u=0, v=0, peso=0;
+	int tam=g->tamanho, tam2=g->numArestas, i=0, qnt=0, prioridade=0, cont=0, entrei=0, u=0, v=0, peso=0, total=0;
 		int *distancia=(int*) malloc(tam * sizeof(int));
 			int *antecessor=(int*) malloc(tam * sizeof(int));
 		//distancia=INT_MAX; ---> infinito
@@ -161,7 +173,7 @@ void dijkstra(Grafo *g)
 				antecessor[i]=-1; //inicializa todos com nenhum antecessor 
 		}
 		int *solucao;
-			solucao=(int*) malloc(tam * sizeof(int));
+			solucao=(int*) malloc(tam * sizeof(int));	
 				for(i=0;i<tam;i++)
 				{
 					solucao[i]=-1;//inicializando
@@ -193,7 +205,7 @@ void dijkstra(Grafo *g)
 						}
 					no=no->proximo;
 					}
-						percorre(heap, qnt);
+					percorre(heap, qnt);
 						distancia[prioridade]=0;
 					while(qnt>0)
 					{
@@ -210,11 +222,12 @@ void dijkstra(Grafo *g)
 							if(verifica(solucao, cont, v) == 0 && distancia[v] > distancia[u] + peso)
 							{
 							solucao[cont]=v;
-							cont++;
-							antecessor[v] = u; //v=u
-								distancia[v] = distancia[u] + peso;
-								prioridade = v; //atualiza a prioridade para que tenha novos adjacentes
-									entrei=1;
+								cont++;
+									antecessor[v] = u; //v=u
+										distancia[v] = distancia[u] + peso;
+											prioridade = v; //atualiza a prioridade para que tenha novos adjacentes
+												entrei=1;
+													total=total + distancia[v];
 							}
 								else
 								{
@@ -246,14 +259,22 @@ void dijkstra(Grafo *g)
 												no=no->proximo;
 												}
 										percorre(heap, qnt);
-										}
+										}	
 						}		
-					printf("Algoritmo de DIJKSTRA\n");
-			for(i=0;i<cont;i++)
-			{
-				printf("[%d]--|%d|-->", solucao[i], distancia[i]);
-			}
-			printf("FIM\n");
+				printf("\n***\nAlgoritmo de DIJKSTRA\n");
+						printf("--Caminho--\n");
+							for(i=0;i<cont;i++)
+							{
+								printf("%d-->", solucao[i]);
+							}
+								printf("FIM\n");
+						printf("\n--Distancia--\n");
+						for(i=0;i<cont;i++)
+						{
+							printf("[%d]-->", distancia[solucao[i]]);
+						}
+						printf("FIM\n");
+					printf("Total das distancias e=%d\n", total);
 }
 
 int verifica(int *vetor, int quantidade, int valor)

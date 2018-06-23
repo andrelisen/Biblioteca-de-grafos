@@ -11,6 +11,7 @@ int main(void)
 {
 	int x, y;
 	Grafo *g;
+	int *vet=(int *) malloc(4 * sizeof(int));
 	do{
 		printf("\n------\n");
 		printf("MENU\n");
@@ -40,7 +41,6 @@ int main(void)
 					case 7:
 							dijkstra(g);
 					break;
-			
 			}
 	}while(x!=0);	
 }

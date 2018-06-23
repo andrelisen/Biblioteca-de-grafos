@@ -1,6 +1,6 @@
 //para o CONJUNTOS/DISJUNTOS
 int *makeset(int qnt);
-void uniao(int *vet, int i, int j);//union
+int *uniao(int *vet, int i, int j);//union
 int findset(int *vet, int j);//representante do elem atual ser = ao repres do atual representante
 void imprimeConj(int num, int *vet);
 //HEAP
