@@ -6,7 +6,7 @@
 #include "busca.h"
 #include "heap.h"
 #include "guloso.h"
-void kruskal(Grafo *g)
+void kruskal(Grafo *g) //ALGORITMO ALTERNATIVO 
 {
 	int i=0, cont=0, qnt=0, tam=g->numArestas, tam2=g->tamanho, x=0, y=0;
 		Aresta *solucao;	
@@ -52,18 +52,20 @@ void kruskal(Grafo *g)
 					VetOrd=deleta(VetOrd, qnt);
 						qnt=qnt-1;
 				}
-				printf("\n***\nAlgoritmo de KRUSKAL\n");
+			printf("\n\t\t\t===Algoritmo de KRUSKAL===\n");
+				printf("Resposta apresentada da seguinte maneira: ---->[CHAVE DE PARTIDA]--PESO DA ARESTA--[CHAVE ADJACENTE]\n");
+					printf("\n");
 					for(i=0;i<cont;i++)
 					{
-						printf("[%d]-->%d-->[%d]-->", solucao[i].chave_partida, solucao[i].peso, solucao[i].chave_adjacente);
+						printf("[%d]---%d---[%d]---->", solucao[i].chave_partida, solucao[i].peso, solucao[i].chave_adjacente);
 					}
 					printf("FIM\n");
 				printf("***\n");
 }
 
-void prim(Grafo *g)
+void prim(Grafo *g) //ALGORITMO ALTERNATIVO 
 {
-	int tam=g->numArestas, prioridade=0, i=0, qnt=0, entrou=0, cont=0, x=0, y=0;
+	int tam=g->numArestas, prioridade=0, i=0, qnt=0, entrou=0, cont=0, x=0, y=0, opc=0;
 		Aresta *solucao;	
 			solucao=(Aresta*) malloc(tam * sizeof(Aresta));
 		int *conjunto=(int *) malloc(g->tamanho * sizeof(int));
@@ -150,20 +152,47 @@ void prim(Grafo *g)
 											}
 									percorre(VetPrior, qnt);
 									}
-				}
-				printf("\n***\nAlgoritmo de PRIM\n***\n");
-				printf("%d->", solucao[0].chave_partida);
-					for(i=0;i<cont;i++)
-					{
-				//		printf("[%d]-->%d-->[%d]..", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
-					printf("%d->", solucao[i].chave_adjacente);
-					}
-						printf("FIM\n***\n");
+				}			
+			do
+			{
+				printf("\n\t\t\t=== Menu para impressao do algoritmo de PRIM ===\n");
+					printf("1-SAIR\n2-Mostrar caminho simples\n3-Caminho através dos pesos\n4-Caminho com arestas completas\nOpcao:");
+						scanf("%d", &opc);
+							switch(opc)
+							{
+								case 2:
+										printf("\t\t\t---CAMINHO---\n");
+											printf("%d->", solucao[0].chave_partida);
+												for(i=0;i<cont;i++)
+												{
+												//printf("[%d]-->%d-->[%d]..", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
+													printf("%d->", solucao[i].chave_adjacente);
+												}
+														printf("FIM\n***\n");
+								break;
+								case 3:
+										printf("\t\t\t---CAMINHO POR PESOS---\n");
+											for(i=0;i<cont;i++)
+											{
+											printf("(%d)-->", solucao[i].peso);
+											}
+												printf("FIM\n***\n");
+								break;
+								case 4:
+										printf("\t\t\t---CAMINHO COM ARESTA COMPLETA---\n");
+											for(i=0;i<cont;i++)
+											{
+											printf("[%d]--%d--[%d]---->", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
+											}
+												printf("FIM\n***\n");
+								break;
+							}
+			}while(opc!=1);
 }
 
-void dijkstra(Grafo *g)
+void dijkstra(Grafo *g) //ALGORITMO CLÁSSICO
 {
-	int tam=g->tamanho, tam2=g->numArestas, i=0, qnt=0, prioridade=0, cont=0, entrei=0, u=0, v=0, peso=0, total=0;
+	int tam=g->tamanho, tam2=g->numArestas, i=0, qnt=0, prioridade=0, cont=0, entrei=0, u=0, v=0, peso=0, total=0, opc=0;
 		int *distancia=(int*) malloc(tam * sizeof(int));
 			int *antecessor=(int*) malloc(tam * sizeof(int));
 		//distancia=INT_MAX; ---> infinito
@@ -261,20 +290,40 @@ void dijkstra(Grafo *g)
 										percorre(heap, qnt);
 										}	
 						}		
-				printf("\n***\nAlgoritmo de DIJKSTRA\n");
-						printf("--Caminho--\n");
-							for(i=0;i<cont;i++)
-							{
-								printf("%d-->", solucao[i]);
-							}
-								printf("FIM\n");
-						printf("\n--Distancia--\n");
-						for(i=0;i<cont;i++)
+				do
+				{		
+				printf("\t\t\t=== Menu para a impressão do Algoritmo de DIJKSTRA ===\n");	
+					printf("1-SAIR\n2-Caminho simples\n3-Caminho atraves das distancias\n4-Caminho com arestas completas\nOpcao:");
+						scanf("%d", &opc);
+						switch(opc)
 						{
-							printf("[%d]-->", distancia[solucao[i]]);
-						}
-						printf("FIM\n");
-					printf("Total das distancias e=%d\n", total);
+						case 2:
+							printf("\t\t\t--Caminho--\n");
+								for(i=0;i<cont;i++)
+								{
+								printf("%d-->", solucao[i]);
+								}
+									printf("FIM\n***\n");
+						break;
+						case 3:
+								printf("\n\t\t\t--Distancia--\n");
+									for(i=0;i<cont;i++)
+									{
+									printf("[%d]-->", distancia[solucao[i]]);
+									}
+									printf("FIM\n***\n");
+											printf("Total das distancias e=%d\n", total);
+						break;
+						case 4:					
+								printf("\t\t\t--CAMINHO COM ARESTA COMPLETA--\n");
+									for(i=0;i<cont;i++)
+									{
+										printf("[%d]---%d---[%d]---->", antecessor[solucao[i]], distancia[solucao[i]], solucao[i]);
+									}
+									printf("FIM\n***\n");
+						break;
+					}
+			}while(opc!=1);
 }
 
 int verifica(int *vetor, int quantidade, int valor)
