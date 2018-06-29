@@ -106,6 +106,8 @@ void buscadfs(Grafo *g)
 		push(nova, val);
 		Nodo *aux=busca(g, val);
 		int *vetorvisitado=(int *)malloc(sizeof(int));
+			if(aux != NULL)
+			{
 				while((vazia(nova))!=1)
 				{
 					val=pop(nova);
@@ -139,12 +141,16 @@ void buscadfs(Grafo *g)
 					//		aux=busca(g, val);
 					//		y=0;
 				}
-						//impressão dos elementos em ordem de busca
+				//impressão dos elementos em ordem de busca
 						printf("\n>A ordem de busca DFS segue abaixo<\n");
 							for(j=0;j<i;j++)
 							{
 								printf("%d\t", vetorvisitado[j]);
 							}
+			}
+			else{
+				printf("Nodo não encontrado, tente novamente!\n");
+			}
 }
  
 //BFS
@@ -212,10 +218,12 @@ void buscabfs(Grafo *g)
 				inserefim(nova, val);
 				Nodo *aux=busca(g, val);
 				int *visitado=(int *) malloc(sizeof(int));		
+				if(aux!= NULL)
+				{
 					while((filavazia(nova))!=1)
 					{					
 							val=retirafila(nova);	
-						printf("Retirando:%d\n", val);
+					//	printf("Retirando:%d\n", val);
 								aux=busca(g, val);	
 									y=0;		
 							for(j=0;j<i;j++)
@@ -248,9 +256,13 @@ void buscabfs(Grafo *g)
 										//y=0;
 					}
 					printf("----\n");
-								printf("\nA ordem de busca BFS segue abaixo\n");
+						printf("\nA ordem de busca BFS segue abaixo\n");
 							for(j=0;j<i;j++)
 							{
-								printf("%d\t", visitado[j]);
+							printf("%d\t", visitado[j]);
 							}
+				}
+				else{
+					printf("Nodo não encontrado, tente novamente!\n");
+				}
 }

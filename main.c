@@ -11,7 +11,6 @@ int main(void)
 {
 	int x, y;
 	Grafo *g;
-	int *vet=(int *) malloc(4 * sizeof(int));
 	do{
 		printf("\n------\n");
 		printf("MENU\n");
