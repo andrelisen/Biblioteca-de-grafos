@@ -57,7 +57,7 @@ void kruskal(Grafo *g) //ALGORITMO ALTERNATIVO
 					printf("\n");
 					for(i=0;i<cont;i++)
 					{
-						printf("[%d]---%d---[%d]---->", solucao[i].chave_partida, solucao[i].peso, solucao[i].chave_adjacente);
+						printf("[%d]---%d---[%d]---->\n", solucao[i].chave_partida, solucao[i].peso, solucao[i].chave_adjacente);
 					}
 					printf("FIM\n");
 				printf("***\n");
@@ -182,7 +182,7 @@ void prim(Grafo *g) //ALGORITMO ALTERNATIVO
 										printf("\t\t\t---CAMINHO COM ARESTA COMPLETA---\n");
 											for(i=0;i<cont;i++)
 											{
-											printf("[%d]--%d--[%d]---->", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
+											printf("[%d]--%d--[%d]---->\n", solucao[i].chave_partida,  solucao[i].peso, solucao[i].chave_adjacente);
 											}
 												printf("FIM\n***\n");
 								break;
@@ -250,6 +250,7 @@ void dijkstra(Grafo *g) //ALGORITMO CLÁSSICO
 						}
 							if(verifica(solucao, cont, v) == 0 && distancia[v] > distancia[u] + peso)
 							{
+							printf("MInha distancia e:%d, e a de u+p=%d", distancia[v], distancia[u]+ peso);
 							solucao[cont]=v;
 								cont++;
 									antecessor[v] = u; //v=u
@@ -318,7 +319,7 @@ void dijkstra(Grafo *g) //ALGORITMO CLÁSSICO
 								printf("\t\t\t--CAMINHO COM ARESTA COMPLETA--\n");
 									for(i=0;i<cont;i++)
 									{
-										printf("[%d]---%d---[%d]---->", antecessor[solucao[i]], distancia[solucao[i]], solucao[i]);
+										printf("[%d]---%d---[%d]---->\n", antecessor[solucao[i]], distancia[solucao[i]], solucao[i]);
 									}
 									printf("FIM\n***\n");
 						break;
